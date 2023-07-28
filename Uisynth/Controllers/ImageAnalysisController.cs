@@ -99,7 +99,7 @@ namespace Uisynth.Controllers
                 //    Directory.CreateDirectory(folderPath);
                 //}
                 string fileName = Path.GetFileNameWithoutExtension(Path.GetRandomFileName()) + ".Png";
-                string ImageFolder = "imagesave/";
+                string ImageFolder = "imagesave1/";
                 string FolderName = ImageFolder + fileName;
 
                 //Create image Folder in the current directory if the folder is not available
