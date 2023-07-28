@@ -1,0 +1,19 @@
+{
+  "UiSynthesizer": [
+    {
+      "UiElement": "RandomString",
+      "TextValue": "MR No.:",
+      "fontname": "Microsoft Sans",
+      "fontweight": "Bold",
+      "fontsize": "10",
+      "textalign": "left",
+      "fontcolor": "#333333",
+      "BGColor": "#ffffff",
+      "Xcoord": "0",
+      "Ycoord": "0",
+      "FieldWidth": "192",
+      "FieldHeight": "34",
+      "TextValue2": ""
+    }
+  ]
+}
