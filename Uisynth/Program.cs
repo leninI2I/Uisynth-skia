@@ -1,9 +1,9 @@
-var xyz = WebApplication.CreateBuilder(args);
+var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-xyz.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews();
 
-var app = xyz.Build();
+var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

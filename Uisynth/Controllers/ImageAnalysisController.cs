@@ -5,6 +5,8 @@ using Uisynth.Models;
 using SkiaSharp;
 using System.IO;
 using Microsoft.AspNetCore.Hosting.Server;
+using System;
+using System.Diagnostics;
 
 namespace Uisynth.Controllers
 {
@@ -12,50 +14,52 @@ namespace Uisynth.Controllers
     {
         public IActionResult Index()
         {
-            string Mainpath = Directory.GetCurrentDirectory();
-            string SecPath = @"wwwroot\Json\imageUI.json";
-            string filePath = Path.Combine(Mainpath, SecPath);
-            string jsonContent = System.IO.File.ReadAllText(filePath);
+            Imageprocessor();
 
-            ///*Deserialize the JSON and pass the values into variables*/
-            var _image_details = JsonSerializer.Deserialize<ImageModel>(jsonContent);
-            foreach (var ImgCreation in _image_details.UiSynthesizer)
-            {
+            //string Mainpath = Directory.GetCurrentDirectory();
+            //string SecPath = @"wwwroot\Json\imageUI.json";
+            //string filePath = Path.Combine(Mainpath, SecPath);
+            //string jsonContent = System.IO.File.ReadAllText(filePath);
 
-                List<string> InputTitleList = new List<string>()
-                    {
-                        ImgCreation.UiElement,
-                        ImgCreation.TextValue,
-                        ImgCreation.fontname,
-                        ImgCreation.fontweight,
-                        ImgCreation.fontsize,
-                        ImgCreation.textalign,
-                        ImgCreation.fontcolor,
-                        ImgCreation.BGColor,
-                        ImgCreation.Xcoord,
-                        ImgCreation.Ycoord,
-                        ImgCreation.FieldWidth,
-                        ImgCreation.FieldHeight,
-                        ImgCreation.TextValue2
-                    };
+            /////*Deserialize the JSON and pass the values into variables*/
+            //var _image_details = JsonSerializer.Deserialize<ImageModel>(jsonContent);
+            //foreach (var ImgCreation in _image_details.UiSynthesizer)
+            //{
 
-                Imageprocessor(InputTitleList);
-            }
+            //    List<string> InputTitleList = new List<string>()
+            //        {
+            //            ImgCreation.UiElement,
+            //            ImgCreation.TextValue,
+            //            ImgCreation.fontname,
+            //            ImgCreation.fontweight,
+            //            ImgCreation.fontsize,
+            //            ImgCreation.textalign,
+            //            ImgCreation.fontcolor,
+            //            ImgCreation.BGColor,
+            //            ImgCreation.Xcoord,
+            //            ImgCreation.Ycoord,
+            //            ImgCreation.FieldWidth,
+            //            ImgCreation.FieldHeight,
+            //            ImgCreation.TextValue2
+            //        };
+
+            //    Imageprocessor(InputTitleList);
+            //}
             return View();
         }
 
-        public void Imageprocessor(List<string> _Image_Ui_Element)
+        public void Imageprocessor()
         {
             try
             {
                 //coding starts here
-                SKBitmap skb = new SKBitmap(150,60);
+                SKBitmap skb = new SKBitmap(150,30);
                 // Create a SKImageInfo object to define the image properties
                 var imageInfo = new SKImageInfo(300, 200);
 
                 SKCanvas skv = new SKCanvas(skb);
                 skv.Clear(SKColors.White);
-                
+
                 //using (var surface = SKSurface.Create(imageInfo))
                 //{
                 //    // Get the SKCanvas from the surface to draw on it
@@ -65,23 +69,56 @@ namespace Uisynth.Controllers
                 //    canvas.Clear(SKColors.White);
 
                 //    //SKBitmap skbit = new SKBitmap(1, 1, true);
+                
+                //font.Size = 10;
+                //font.Metrics.AverageCharacterWidth = 
 
-                    string textgen = "Discharge Date:";
+                //SKTypefaceStyle sKFontStyleWeight = SKTypefaceStyle.Bold;
+
+                //// Create a new SKTypeface object with the desired font family
+                //SKTypeface typeface = SKTypeface.FromFamilyName("Microsoft Sans", sKFontStyleWeight);
+
+                SKFontStyle style = new SKFontStyle();
+                
+                SKFontStyleWeight weight = SKFontStyleWeight.Bold; //Fontstyle
+                SKFontStyleSlant sKFontStyleSL = new SKFontStyleSlant();
+                SKTypeface typeface = SKTypeface.FromFamilyName("Microsoft Sans Serif",(int)weight,20,sKFontStyleSL);
+
+                SKFont font = new SKFont(typeface, 14, 1, 0);
+
+                //SKMaskFilter SKMF = SKMaskFilter.CreateBlur()
+                string textgen = "Discharge Date:";
+                //var shader = SKShader.CreateBitmap(skb, SKShaderTileMode.Clamp, SKShaderTileMode.Clamp);
+
                     // Create a paint object to define the appearance of the shapes
                     var paint = new SKPaint
                     {
-                        Color = SKColors.Blue,
-                        IsAntialias = true,
+                        //Color = SKColors.Black,
+                        IsAntialias = true, //No Change - Equivalent to SmoothingMode
                         Style = SKPaintStyle.Fill,
                         TextAlign = SKTextAlign.Left,
-                        TextEncoding = SKTextEncoding.Utf32,
-                        HintingLevel = SKPaintHinting.Full
+                        TextEncoding = SKTextEncoding.GlyphId, //Equivalent to TextRenderingHint
+                        HintingLevel = SKPaintHinting.Full,
+                        BlendMode = SKBlendMode.Modulate, //No Change
+                        Typeface = typeface,
+                        FilterQuality = SKFilterQuality.High, //Equivalent to CompositingQuality
+                        IsEmbeddedBitmapText = true,
+                        TextScaleX = 5.0f,
+                        SubpixelText = true,
+                        StrokeWidth = 2.0f,
+                        ColorF = SKColors.Black,
+                        IsAutohinted = true,
+                        IsDither = true
+                        
+                        
+                        
                         
                     };
 
                     // Draw a rectangle on the canvas
                     //canvas.DrawRect(new SKRect(50, 50, 250, 150), paint);
-                    skv.DrawText(textgen, 30, 30, paint);
+                    //skv.DrawText(textgen, 30, 30, paint);
+                    skv.DrawText(textgen, 20, 20, font, paint);
 
 
                 //SKImage ski = SKImage.FromBitmap(skb);
@@ -99,7 +136,7 @@ namespace Uisynth.Controllers
                 //    Directory.CreateDirectory(folderPath);
                 //}
                 string fileName = Path.GetFileNameWithoutExtension(Path.GetRandomFileName()) + ".Png";
-                string ImageFolder = "imagesave1/";
+                string ImageFolder = "imagesave2/";
                 string FolderName = ImageFolder + fileName;
 
                 //Create image Folder in the current directory if the folder is not available
@@ -109,13 +146,29 @@ namespace Uisynth.Controllers
                     Directory.CreateDirectory(RootPath);
                 }
 
-                //Save an image into the created folder 
-                using (var image = SKImage.FromBitmap(skb))
-                    using (var data = image.Encode(SKEncodedImageFormat.Png, 100))
-                        using (var stream = System.IO.File.OpenWrite(FolderName))
-                        {
-                            data.SaveTo(stream);
-                        }
+                ////Save an image into the created folder 
+                //using (var image = SKImage.FromBitmap(skb))
+                //    using (var data = image.Encode(SKEncodedImageFormat.Png, 100))
+                //        using (var stream = File(RootPath, "image/png")
+                //        {
+                //            data.SaveTo(stream);
+                //        }
+
+
+                using (var imageStream = new MemoryStream())
+                {
+                    
+                    var data = skb.Encode(SKEncodedImageFormat.Png, 100);
+                    using (var imgstr = System.IO.File.OpenWrite(FolderName))
+                    {
+                        data.SaveTo(imgstr);
+                    }
+                        
+                    //imageStream.Position = 0;
+
+                    // Return the image as a FileResult (this will prompt the browser to download the image)
+                    //return File(imageStream, "image/png", "rendered_text.png");
+                }
 
                 //var uploadedFile = Request.Form.Files[0];
 
